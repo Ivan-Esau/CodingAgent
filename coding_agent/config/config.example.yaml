@@ -1,0 +1,4 @@
+# Example configuration for API keys and settings
+llm_api_key: YOUR_LLM_API_KEY
+gitlab_token: YOUR_GITLAB_TOKEN
+github_token: YOUR_GITHUB_TOKEN
