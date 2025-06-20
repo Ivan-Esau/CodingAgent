@@ -3,13 +3,6 @@ import json # For printing structured data if needed
 class LLMProvider:
     def __init__(self, api_key, mcp_server_configs=None):
         self.api_key = api_key
-        # mcp_server_configs should be a list of dicts, e.g.:
-        # [{
-        #     "type": "url",
-        #     "url": "https://your-gitlab-mcp-server.example.com/sse", # Must be https for Anthropic
-        #     "name": "gitlab_server_1",
-        #     "authorization_token": "OPTIONAL_GITLAB_MCP_TOKEN"
-        # }]
         self.mcp_server_configs = mcp_server_configs if mcp_server_configs else []
         print(f"LLM Provider initialized. MCP Servers configured: {len(self.mcp_server_configs)}")
 
@@ -42,8 +35,6 @@ class LLMProvider:
 
         prompt_messages = [{"role": "user", "content": prompt}]
 
-        # Get request details (URL, headers, body)
-        # In a real scenario, an HTTP client would use these to make the request
         api_url, headers, body = self._prepare_anthropic_request(prompt_messages)
 
         print(f"LLMProvider: Simulating API call to Anthropic.")
@@ -51,34 +42,21 @@ class LLMProvider:
         print(f"LLMProvider: Headers: {json.dumps(headers)}")
         print(f"LLMProvider: Body: {json.dumps(body)}")
 
-        # Simulate different responses based on whether MCP is likely used
         if self.mcp_server_configs and task_type == "gitlab_query":
-            # Simulate a response where the LLM used an MCP tool
-            # This is a simplified representation of what Anthropic's backend would do
-            # The actual API response would be more complex, potentially involving multiple turns
-            # if the LLM calls a tool and then we send results back (though MCP connector handles this)
-
-            # Example: LLM used a tool, and Anthropic's MCP connector handled the tool call & result.
-            # The final response here is the LLM's textual response after using the tool.
+            print(f"LLMProvider: Simulating LLM used a GitLab MCP tool via connector.") # Added specific print
             simulated_llm_response_content = f"Accessed GitLab via MCP. The pipeline status is: SUCCESSFUL. (Simulated)"
-
-            # The actual API response structure from Anthropic when MCP connector is used
-            # would involve messages with role 'assistant' and content that might include
-            # 'mcp_tool_use' and 'mcp_tool_result' blocks in the history if we were showing the full trace,
-            # but the final message from the LLM is just text.
-            # For this simulation, we just return the final text.
-            print(f"LLMProvider: Simulating LLM used an MCP tool via connector.")
+            return simulated_llm_response_content
+        elif self.mcp_server_configs and task_type == "github_query": # New block, correctly indented
+            print(f"LLMProvider: Simulating LLM used a GitHub MCP tool via connector.")
+            simulated_llm_response_content = f"Accessed GitHub via MCP. The README.md content is: '# GitHub Readme'. Issue 42 comments: ['Comment 1 on 42'] (Simulated)"
             return simulated_llm_response_content
         else:
             # Simulate a general text generation response
             print(f"LLMProvider: Simulating general LLM text generation.")
             return f"This is a simulated LLM response to: {prompt}"
 
-    # Kept original generate_code and review_code as placeholders if needed elsewhere,
-    # but generate_text is the more MCP-aware one.
     def generate_code(self, prompt: str) -> str:
         print(f"LLMProvider (generate_code): Generating code for prompt: {prompt}")
-        # This could also be adapted to use _prepare_anthropic_request if needed
         return self.generate_text(f"Generate code for this task: {prompt}", task_type="code_generation")
 
     def review_code(self, code: str) -> str:

@@ -13,6 +13,11 @@ class CodingAgent:
             llm_response = self.llm_client.generate_text(prompt=task_description, task_type="gitlab_query")
             print(f"CodingAgent: LLM response for GitLab query: {llm_response}")
 
+        elif task_type == "github_query": # New block, correctly indented
+            print("CodingAgent: Task is GitHub related, leveraging LLM with potential MCP tools.")
+            llm_response = self.llm_client.generate_text(prompt=task_description, task_type="github_query")
+            print(f"CodingAgent: LLM response for GitHub query: {llm_response}")
+
         elif task_type == "code_generation":
             print("CodingAgent: Task is code generation.")
             generated_code = self.llm_client.generate_code(prompt=task_description)
@@ -22,12 +27,6 @@ class CodingAgent:
             review_comments = self.llm_client.review_code(code=generated_code)
             print(f"Agent received review comments: \n{review_comments}")
 
-            # Placeholder for Git operations - this part will heavily change with MCP
-            # For example, LLM might use an MCP tool to create a branch and commit.
-            # files_to_commit = ["example_module.py"]
-            # commit_message = f"Automated commit by CodingAgent for task: {task_description}"
-            # commit_status = self.git_client.commit_changes(message=commit_message, files=files_to_commit)
-            # print(f"Agent received commit status: {commit_status}")
             print("CodingAgent: (Simulated) Code generation and review complete. Git operations would follow.")
 
         else:
