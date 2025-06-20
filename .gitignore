@@ -1,0 +1,2 @@
+# Ignore the temporary directory used for cloning and testing
+gitlab_mcp_server_temp/
